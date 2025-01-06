@@ -28,8 +28,16 @@ def send_email():
             return jsonify({"error": "Invalid location data"}), 400
 
         # Prepare the email content
+        maps_link = f"https://www.google.com/maps?q={latitude},{longitude}"
+
+        # Prepare the email content
         subject = "User Location"
-        body = f"User's location: Latitude={latitude}, Longitude={longitude}"
+        body = (
+            f"User's location:\n"
+            f"Latitude: {latitude}\n"
+            f"Longitude: {longitude}\n"
+            f"Google Maps: {maps_link}"
+        )
         msg = MIMEText(body)
         msg["Subject"] = subject
         msg["From"] = EMAIL_USER
