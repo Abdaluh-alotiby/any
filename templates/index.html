@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Location</title>
+</head>
+<body>
+    <h1>Sending Your Location...</h1>
+    <p id="status">Please wait...</p>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const data = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    };
+
+                    try {
+                        const response = await fetch("/send-email", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(data)
+                        });
+
+                        if (response.ok) {
+                            document.getElementById("status").textContent = "Location sent successfully!";
+                        } else {
+                            const error = await response.json();
+                            document.getElementById("status").textContent = "Failed to send location: " + error.error;
+                        }
+                    } catch (error) {
+                        console.error("Error sending location:", error);
+                        document.getElementById("status").textContent = "An error occurred.";
+                    }
+                }, (error) => {
+                    document.getElementById("status").textContent = "Failed to get location: " + error.message;
+                });
+            } else {
+                document.getElementById("status").textContent = "Geolocation is not supported by this browser.";
+            }
+        });
+    </script>
+</body>
+</html>
