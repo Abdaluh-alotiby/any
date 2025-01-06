@@ -1,19 +1,19 @@
-import os
 from flask import Flask, request, jsonify, render_template
 import smtplib
 from email.mime.text import MIMEText
 
 app = Flask(__name__)
 
-# Load email credentials from environment variables
+# Replace these with your email settings
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-EMAIL_USER = os.getenv("EMAIL_USER")  # Environment variable for email
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")  # Environment variable for email password
+EMAIL_USER = "alotibyabdallh@gmail.com"
+EMAIL_PASSWORD = "jiry jnrr cipm edap"
 
 
 @app.route("/")
 def index():
+    # Serve the HTML template
     return render_template("index.html")
 
 
@@ -27,7 +27,7 @@ def send_email():
         if not latitude or not longitude:
             return jsonify({"error": "Invalid location data"}), 400
 
-        # Generate the Google Maps link
+        # Prepare the email content
         maps_link = f"https://www.google.com/maps?q={latitude},{longitude}"
 
         # Prepare the email content
@@ -54,6 +54,5 @@ def send_email():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
